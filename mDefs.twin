@@ -1,0 +1,197 @@
+'Extracted from WinDevLib - Windows Development Library for twinBASIC
+'It's recommended you use that package in normal projects as it will
+'avoid copying all these definitions, but I wanted to conserve file 
+'size in this case.
+
+[InterfaceId("0c733a30-2a1c-11ce-ade5-00aa0044773d")]
+[OleAutomation(False)]
+Interface ISequentialStream Extends stdole.IUnknown
+    Function Read(pv As Any, ByVal cb As Long) As Long
+    Function Write(pv As Any, ByVal cb As Long) As Long
+End Interface
+[InterfaceId("0000000c-0000-0000-C000-000000000046")]
+[OleAutomation(False)]
+Interface IStream Extends ISequentialStream
+    Function Seek(ByVal dlibMove As LongLong, ByVal dwOrigin As STREAM_SEEK) As LongLong
+    Sub SetSize(ByVal libNewSize As LongLong)
+    Sub CopyTo(ByVal pStm As IStream, ByVal cb As LongLong, pcbRead As LongLong, pcbWritten As LongLong)
+    Sub Commit(ByVal grfCommitFlags As STGC)
+    Sub Revert()
+    Sub LockRegion(ByVal libOffset As LongLong, ByVal cb As LongLong, ByVal dwLockType As LOCKTYPE)
+    Sub UnlockRegion(ByVal libOffset As LongLong, ByVal cb As LongLong, ByVal dwLockType As LOCKTYPE)
+    Sub Stat(pstatstg As STATSTG, ByVal grfStatFlag As STATFLAG)
+    Function Clone() As IStream
+End Interface
+
+[InterfaceId("3127CA40-446E-11CE-8135-00AA004BB851")]
+[OleAutomation(False)]
+Interface IErrorLog Extends stdole.IUnknown
+    Sub AddError(ByVal pszPropName As String, pExcepInfo As Any)
+End Interface
+
+[InterfaceId("55272A00-42CB-11CE-8135-00AA004BB851")]
+[OleAutomation(False)]
+Interface IPropertyBag Extends stdole.IUnknown
+    Sub Read(ByVal pszPropName As LongPtr, pVar As Variant, ByVal pErrorLog As IErrorLog)
+    Sub Write(ByVal pszPropName As LongPtr, pVar As Variant)
+End Interface
+
+[InterfaceId("9be8ed5c-edab-4d75-90f3-bd5bdbb21c82")]
+[OleAutomation(False)]
+Interface IShellImageDataFactory Extends stdole.IUnknown
+    Sub CreateIShellImageData(ppshimg As IShellImageData)
+    Sub CreateImageFromFile(ByVal pszPath As LongPtr, ppshimg As IShellImageData)
+    Sub CreateImageFromStream(ByVal pStream As IStream, ppshimg As IShellImageData)
+    Sub GetDataFormatFromPath(ByVal pszPath As LongPtr, pDataFormat As UUID)
+End Interface
+[InterfaceId("bfdeec12-8040-4403-a5ea-9e07dafcf530")]
+[OleAutomation(False)]
+Interface IShellImageData Extends stdole.IUnknown
+    [PreserveSig] Function Decode(ByVal dwFlags As SHIMGDEC, ByVal cxDesired As Long, ByVal cyDesired As Long) As Long
+    [PreserveSig] Function Draw(ByVal hDC As LongPtr, prcDest As RECT, prcSource As RECT) As Long
+    [PreserveSig] Function NextFrame() As Long
+    [PreserveSig] Function NextPage() As Long
+    [PreserveSig] Function PrevPage() As Long
+    [PreserveSig] Function IsTransparent() As Long
+    [PreserveSig] Function IsAnimated() As Long
+    [PreserveSig] Function IsVector() As Long
+    [PreserveSig] Function IsMultipage() As Long
+    [PreserveSig] Function IsEditable() As Long
+    [PreserveSig] Function IsPrintable() As Long
+    [PreserveSig] Function IsDecoded() As Long
+    [PreserveSig] Function GetCurrentPage(pnPage As Long) As Long
+    [PreserveSig] Function GetPageCount(pcPages As Long) As Long
+    [PreserveSig] Function SelectPage(ByVal iPage As Long) As Long
+    [PreserveSig] Function GetSize(pSize As SIZE) As Long
+    [PreserveSig] Function GetRawDataFormat(pDataFormat As UUID) As Long
+    [PreserveSig] Function GetPixelFormat(pFormat As Long) As Long
+    [PreserveSig] Function GetDelay(pdwDelay As Long) As Long
+    [PreserveSig] Function GetProperties(ByVal dwMode As Long, ppPropSet As IUnknown) As Long
+    [PreserveSig] Function Rotate(ByVal dwAngle As Long) As Long
+    [PreserveSig] Function Scale(ByVal cx As Long, ByVal cy As Long, ByVal hints As InterpolationMode) As Long
+    [PreserveSig] Function DiscardEdit() As Long
+    [PreserveSig] Function SetEncoderParams(ByVal pbagEnc As IPropertyBag) As Long
+    [PreserveSig] Function DisplayName(ByVal wszName As String, ByVal cch As Long) As Long
+    [PreserveSig] Function GetResolution(puResolutionX As Long, puResolutionY As Long) As Long
+    [PreserveSig] Function GetEncoderParams(pguidFmt As UUID, ppEncParams As LongPtr) As Long
+    [PreserveSig] Function RegisterAbort(ByVal pAbort As IShellImageDataAbort, ppAbortPrev As IShellImageDataAbort) As Long
+    [PreserveSig] Function CloneFrame(ppImg As LongPtr) As Long
+    [PreserveSig] Function ReplaceFrame(ByVal pImg As LongPtr) As Long
+End Interface
+[InterfaceId("53fb8e58-50c0-4003-b4aa-0c8df28e7f3a")]
+[OleAutomation(False)]
+Interface IShellImageDataAbort Extends stdole.IUnknown
+    Sub QueryAbort()
+End Interface
+
+[Description("CLSID_ShellImageDataFactory")]
+[CoClassId("66e4e4fb-f385-4dd0-8d74-a2efd1bc6178")]
+CoClass ShellImageDataFactory
+     [Default] Interface IShellImageDataFactory
+End CoClass
+Module mDefs
+    Public Const S_OK = 0
+    Public Type UUID
+        Data1 As Long
+        Data2 As Integer
+        Data3 As Integer
+        Data4(0 To 7) As Byte
+    End Type
+    Public Type RECT
+        Left As Long
+        Top As Long
+        Right As Long
+        Bottom As Long
+    End Type
+    Public Type SIZE
+        cx As Long
+        cy As Long
+    End Type
+    Public Enum SHIMGDEC
+        SHIMGDEC_DEFAULT = &H00000000 ' creates a full Image
+        SHIMGDEC_THUMBNAIL = &H00000001 ' decodes only thumbnail image
+        SHIMGDEC_LOADFULL = &H00000002 ' load the whole file into memory
+    End Enum
+    Public Enum QualityMode
+        QualityModeInvalid = -1
+        QualityModeDefault = 0
+        QualityModeLow = 1 ' Best performance
+        QualityModeHigh = 2 ' Best rendering quality
+    End Enum
+    Public Enum InterpolationMode
+        InterpolationModeInvalid = QualityModeInvalid
+        InterpolationModeDefault = QualityModeDefault
+        InterpolationModeLowQuality = QualityModeLow
+        InterpolationModeHighQuality = QualityModeHigh
+        InterpolationModeBilinear = 0
+        InterpolationModeBicubic = 1
+        InterpolationModeNearestNeighbor = 2
+        InterpolationModeHighQualityBilinear = 3
+        InterpolationModeHighQualityBicubic = 4
+    End Enum
+    Public Enum STREAM_SEEK
+        STREAM_SEEK_SET = 0
+        STREAM_SEEK_CUR = 1
+        STREAM_SEEK_END = 2
+    End Enum
+    Public Enum LOCKTYPE
+        LOCK_WRITE = 1
+        LOCK_EXCLUSIVE = 2
+        LOCK_ONLYONCE = 4
+    End Enum
+    Public Enum STGTY
+        STGTY_STORAGE = 1
+        STGTY_STREAM = 2
+        STGTY_LOCKBYTES = 3
+        STGTY_PROPERTY = 4
+    End Enum
+    Public Enum STGC
+        STGC_DEFAULT = 0
+        STGC_OVERWRITE = 1
+        STGC_ONLYIFCURRENT = 2
+        STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 4
+        STGC_CONSOLIDATE = 8
+    End Enum
+    Public Enum STATFLAG
+        STATFLAG_DEFAULT = 0
+        STATFLAG_NONAME = 1
+        STATFLAG_NOOPEN = 2
+    End Enum
+    Public Type STATSTG
+        pwcsName As LongPtr
+        type As STGTY
+        cbSize As LongLong
+        mtime As LongLong
+        ctime As LongLong
+        atime As LongLong
+        grfMode As STGM
+        grfLocksSupported As LOCKTYPE
+        clsid As UUID
+        grfStateBits As Long
+        reserved As Long
+    End Type
+    Public Enum STGM
+        STGM_DIRECT = &H00000000
+        STGM_TRANSACTED = &H00010000
+        STGM_SIMPLE = &H08000000
+        STGM_READ = &H00000000
+        STGM_WRITE = &H00000001
+        STGM_READWRITE = &H00000002
+        STGM_SHARE_DENY_NONE = &H00000040
+        STGM_SHARE_DENY_READ = &H00000030
+        STGM_SHARE_DENY_WRITE = &H00000020
+        STGM_SHARE_EXCLUSIVE = &H00000010
+        STGM_PRIORITY = &H00040000
+        STGM_DELETEONRELEASE = &H04000000
+        STGM_NOSCRATCH = &H00100000
+        STGM_CREATE = &H00001000
+        STGM_CONVERT = &H00020000
+        STGM_FAILIFTHERE = &H00000000
+        STGM_NOSNAPSHOT = &H00200000
+        STGM_DIRECT_SWMR = &H00400000
+    End Enum
+    [Description("Indicates whether an HRESULT value represents a successful operation (>= 0)")]
+    Public Function SUCCEEDED(hr As Long) As Boolean
+        Return hr >= 0
+    End Function
+End Module
