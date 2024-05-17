@@ -6,6 +6,18 @@
 [Description("${ProjectName}.${ComponentName}")]
 Class ucAniGif
 
+'ucAniGif v1.0.2 
+'by Jon Johnson (fafalone)
+'
+'Licensed under the MIT license
+'
+'Project home: https://github.com/fafalone/ucAniGif
+'
+'Updates:
+'
+'v1.0.2 (17 May 2024) - Back color wasn't initialized properly.
+'
+
 Option Explicit
 
 Private pFactory As IShellImageDataFactory
@@ -61,6 +73,7 @@ Private Sub UserControl_InitProperties() Handles UserControl.InitProperties
     mLoop = mDefLoop
     mAuto = mDefAuto
     mSize = mDefSize
+    mBk = mDefBk
 End Sub
 
 Private Sub UserControl_Show() Handles UserControl.Show
@@ -88,6 +101,7 @@ Private Sub Init()
     Line2.X2 = UserControl.Width
     Line2.Y1 = UserControl.Height
     Line2.Y2 = 0
+    UserControl.BackColor = mBk
 End Sub
 
 Private Sub UserControl_Resize() Handles UserControl.Resize
