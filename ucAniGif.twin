@@ -6,7 +6,7 @@
 [Description("${ProjectName}.${ComponentName}")]
 Class ucAniGif
 
-'ucAniGif v1.0.2 
+'ucAniGif v1.0.3
 'by Jon Johnson (fafalone)
 '
 'Licensed under the MIT license
@@ -15,6 +15,7 @@ Class ucAniGif
 '
 'Updates:
 '
+'v1.0.3 (17 May 2024) - Back color not saved properly; now defaults to default UF BackColor.
 'v1.0.2 (17 May 2024) - Back color wasn't initialized properly.
 '
 
@@ -31,7 +32,7 @@ Private Const mDefLoop As Boolean = True
 Private mFile As String
 
 Private mBk As Long
-Private Const mDefBk As Long = &HFFFFFF
+Private Const mDefBk As Long = &H8000000F
 
 Private mAuto As Boolean
 Private Const mDefAuto As Boolean = False
@@ -57,6 +58,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag) Handles UserContr
     'mLoop = PropBag.ReadProperty("Loop", mDefLoop)
     mAuto = PropBag.ReadProperty("Autoplay", mDefAuto)
     mSize = PropBag.ReadProperty("SizeToFit", mDefSize)
+    mBk = PropBag.ReadProperty("BackColor", mDefBk)
     If mInit = False Then
         Init
     End If
@@ -67,6 +69,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag) Handles UserCont
     'PropBag.WriteProperty "Loop", mLoop, mDefLoop
     PropBag.WriteProperty "Autoplay", mAuto, mDefAuto
     PropBag.WriteProperty "SizeToFit", mSize, mDefSize
+    PropBag.WriteProperty "BackColor", mBk, mDefBk
 End Sub
 
 Private Sub UserControl_InitProperties() Handles UserControl.InitProperties
@@ -74,6 +77,7 @@ Private Sub UserControl_InitProperties() Handles UserControl.InitProperties
     mAuto = mDefAuto
     mSize = mDefSize
     mBk = mDefBk
+    UserControl.BackColor = mBk
 End Sub
 
 Private Sub UserControl_Show() Handles UserControl.Show
