@@ -11,7 +11,7 @@ This can be built with the free version of twinBASIC from ucAniGif.twinproj, but
 
 The code itself is very simple; it's just a thin wrapper over IShellImageData. But of course, using COM interfaces is painful in VBA 64bit without typelibs like my oleexp. tB is not only the only way to build 64bit ActiveX controls for 64bit Office, it also supports easily defining COM interfaces with BASIC syntax in the project, and has my WinDevLib project available, which allows development with thousands of interfaces and APIs already available.
 
-You can browse the source online in ucAniGif.twin, or import the .tbcontrol/.twin files into a tB project to use it there, or play with the test project.
+You can browse the source online in ucAniGif.twin, or import the .tbcontrol/.twin/mDefs.twin files into a tB project to use it there, or play with the test project.
 
 If you haven't checked out twinBASIC before, the FAQ is a great place to start: https://github.com/twinbasic/documentation/wiki/twinBASIC-Frequently-Asked-Questions-(FAQs)
 
