@@ -16,3 +16,14 @@ You can browse the source online in ucAniGif.twin, or import the .tbcontrol/.twi
 
 If you haven't checked out twinBASIC before, the FAQ is a great place to start: https://github.com/twinbasic/documentation/wiki/twinBASIC-Frequently-Asked-Questions-(FAQs)
 
+PS - Transparency is respected, but you have to set the control's BackColor manually in this initial version:
+
+![image](https://github.com/fafalone/ucAniGif/assets/7834493/55e35ffe-dacc-493e-ae4b-04ffeb900aba)
+
+e.g.
+
+```vba
+Private Sub UserForm_Initialize()
+ ucAniGif1.BackColor = Me.BackColor
+End Sub
+```
