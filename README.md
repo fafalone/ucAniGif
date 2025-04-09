@@ -1,3 +1,8 @@
+## New version: [ucAniGifEx](https://github.com/fafalone/ucAniGifEx)
+### This version is deprecated and has many issues, many not fixable. The new one is just as easy to use, still compatible with VB6/VBA, and still compatible with Windows 7.
+
+
+
 # ucAniGif
 Animated GIF ActiveX Control
 
